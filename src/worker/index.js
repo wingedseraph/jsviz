@@ -1,7 +1,11 @@
 import * as babel from "@babel/core";
+import Vue from 'vue';
 
 import { describe } from "../lib/describe";
 import transpilerPlugin from "./transpile_plugin";
+
+// Make Vue available globally in the worker context
+self.Vue = Vue;
 
 const id = Math.floor(Math.random() * 1000);
 
@@ -17,6 +21,9 @@ self.onmessage = ({ data: { code, config = {} } }) => {
   try {
     const transpiled = transpile(code, config);
     self.describe = describe;
+    // Make Vue available in the execution environment
+    self.Vue = typeof Vue !== 'undefined' ? Vue : (typeof globalThis !== 'undefined' && globalThis.Vue ? globalThis.Vue : undefined);
+
     let getSteps = eval(`
       (((undefined) => {
         const console = new (class console {
@@ -33,6 +40,9 @@ self.onmessage = ({ data: { code, config = {} } }) => {
         };
         ${ns}.describe = self.describe;
         ${ns}.cache = {};
+        // Make Vue available in the execution context
+        ${ns}.Vue = typeof self !== 'undefined' && self.Vue ? self.Vue :
+                   (typeof globalThis !== 'undefined' && globalThis.Vue ? globalThis.Vue : undefined);
         ${ns}.report = function(value, meta) {
           meta.dt = Date.now() - ${ns}._t0;
           meta.num = ${ns}._steps.push(meta) - 1;

@@ -9,10 +9,12 @@
   "scripts": {
     "build": "parcel build src/index.html",
     "start": "parcel src/index.html src/worker/index.js",
+    "dev": "parcel src/index.html src/worker/index.js",
     "clean": "rm -rf .cache dist"
   },
   "dependencies": {
     "@babel/core": "^7.0.0-0",
+    "@vueuse/core": "^14.1.0",
     "babel-plugin-macros": "^2.8.0",
     "babel-polyfill": "^6.26.0",
     "common-tags": "^1.8.0",
@@ -25,7 +27,8 @@
     "react-range": "^1.4.9",
     "react-simple-code-editor": "^0.11.0",
     "react-use": "^13.20.0",
-    "styled-components": "^5.0.0"
+    "styled-components": "^5.0.0",
+    "vue": "^3.5.26"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.8.3",

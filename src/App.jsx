@@ -3,6 +3,10 @@ import React, { useState, useEffect } from "react";
 import { useThrottle } from "react-use";
 import Editor from "react-simple-code-editor";
 
+// Add Vue to global scope
+import Vue from 'vue';
+globalThis.Vue = Vue;
+
 import { undescribe } from "./lib/describe";
 import add_waiting_time_steps from "./lib/add_waiting_time_steps";
 import presets from "./lib/presets";

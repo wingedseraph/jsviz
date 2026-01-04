@@ -6,6 +6,7 @@ import format_dt from "../lib/format_dt";
 
 import Spinner from "./Spinner";
 import theme from "./theme";
+import styles from "./StepSlider.module.css";
 
 export default function StepSlider({
   max,
@@ -49,15 +50,7 @@ export default function StepSlider({
   };
 
   return (
-    <div
-      css={`
-        flex-grow: 1;
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        padding: 0 22px;
-      `}
-    >
+    <div className={styles.container}>
       <Range
         values={[value]}
         step={0.001}
@@ -84,32 +77,15 @@ export default function StepSlider({
               //   props.onTouchStart(e);
               // }}
               style={props.style}
-              css={`
-                height: 88px;
-                display: flex;
-                width: 100%;
-              `}
+              className={styles.trackContainer}
             >
               <div
                 ref={props.ref}
-                css={`
-                  height: 80px;
-                  width: 100%;
-                  align-self: center;
-                  position: relative;
-                `}
+                className={styles.trackInner}
               >
                 {children}
                 <div
-                  css={`
-                    position: absolute;
-                    top: 0;
-                    left: -20px;
-                    right: -20px;
-                    bottom: 0;
-                    z-index: 20;
-                    border-radius: 4px;
-                  `}
+                  className={styles.trackBackground}
                   style={{
                     background: getTrackBackground({
                       values: [value],
@@ -128,19 +104,7 @@ export default function StepSlider({
                 />
                 {value < 0.1 && (
                   <div
-                    css={`
-                      z-index: 25;
-                      position: absolute;
-                      top: 0;
-                      bottom: 0;
-                      left: 40px;
-
-                      display: flex;
-                      align-items: center;
-
-                      font-size: 16px;
-                      color: #777;
-                    `}
+                    className={styles.trackHelperText}
                   >
                     {thumb.loading
                       ? "Loading..."
@@ -168,65 +132,18 @@ export default function StepSlider({
                 id="StepSliderThumb"
                 autoFocus
                 ref={btn}
-                css={`
-                  display: flex;
-                  margin: 0;
-                  padding: 0;
-                  height: 44px;
-                  width: 44px;
-                  box-sizing: border-box;
-
-                  position: relative;
-
-                  outline: none;
-                  cursor: pointer;
-                  border: 2px solid transparent;
-
-                  border-radius: 4px;
-                  background-color: #fff;
-                  justify-content: center;
-                  align-items: center;
-                  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
-
-                  &:focus {
-                    color: ${theme.blue};
-                    border-color: ${theme.blue};
-                  }
-
-                  .C {
-                    height: 16px;
-                    width: 6px;
-                    background: #ccc;
-                  }
-
-                  font-size: 0.9rem;
-                  font-family: Menlo, Consolas, monospace;
-                  font-weight: bold;
-
-                  ${thumb.error &&
-                    `
-                    &,
-                    &:focus {
-                      color: #c00;
-                      border-color: #c00;
-                    }
-                  `}
-                `}
+                className={`${styles.thumbButton} ${thumb.error ? styles.error : ''}`}
+                style={{
+                  color: thumb.error ? '#c00' : (btn.current === document.activeElement ? theme.blue : undefined),
+                  borderColor: thumb.error ? '#c00' : (btn.current === document.activeElement ? theme.blue : undefined)
+                }}
               >
                 {thumb.content}
               </button>
-              <div css="position: relative;">
+              <div className={styles.thumbButtonContainer}>
                 {step && "dt" in step && (
                   <div
-                    css={`
-                      position: absolute;
-                      top: 4px;
-                      left: -1rem;
-                      right: -1rem;
-                      text-align: center;
-                      font-size: 14px;
-                      white-space: nowrap;
-                    `}
+                    className={styles.stepTime}
                   >
                     {format_dt(step.dt, "@ ")}
                   </div>

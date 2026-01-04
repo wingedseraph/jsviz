@@ -1,0 +1,46 @@
+.explainerHeader {
+  cursor: pointer;
+  transition: color 0.15s ease;
+  color: #aaa;
+}
+
+.explainerHeader:hover {
+  color: #777;
+}
+
+.explainerHeader.expanded {
+  color: black !important;
+}
+
+.arrowIcon {
+  vertical-align: text-bottom;
+  margin-bottom: 2px;
+  transition: transform 0.15s ease;
+}
+
+.arrowIcon.expanded {
+  transform: rotate(180deg);
+}
+
+.explainerContent {
+  animation: Explainer_enter_kf 0.15s ease;
+}
+
+@keyframes Explainer_enter_kf {
+  from {
+    transform: translate(0, 10px);
+    opacity: 0;
+  }
+  to {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+
+.codeBlock {
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  display: inline-block;
+  margin: 0 0 0 10px;
+}

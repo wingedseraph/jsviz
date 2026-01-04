@@ -1,0 +1,105 @@
+.menuContainer {
+  position: relative;
+}
+
+.menuButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  width: 44px;
+  height: 88px;
+  background: none;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+}
+
+.menuButton:focus {
+  background: #eee;
+}
+
+.center {
+  display: block;
+  position: relative;
+}
+
+.center span {
+  display: block;
+  position: absolute;
+  background: black;
+  height: 3px;
+  top: -1.5px;
+  width: 20px;
+  left: -10px;
+  transition: transform 0.1s ease;
+}
+
+.center .m {
+  left: -18px;
+  top: -2px;
+}
+
+.menuDropdown {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  min-width: 240px;
+  z-index: 50;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+  animation: Menu_open_kf 0.2s ease;
+}
+
+@keyframes Menu_open_kf {
+  from {
+    transform: translate(0, 10px);
+    opacity: 0;
+  }
+  to {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+
+.menuListContainer {
+  padding: 0.6rem 0;
+}
+
+.menuList {
+  margin: 0;
+  padding: 0;
+}
+
+.menuList li {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.menuList button {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  border: 2px solid transparent;
+  background: none;
+  margin: 0;
+  padding: 0.3rem 1rem;
+  white-space: nowrap;
+  text-align: left;
+  font-family: "Work Sans", sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.menuList button:hover,
+.menuList button:focus {
+  background: #eee;
+}
+
+/* Note: Dynamic colors are handled with inline styles */

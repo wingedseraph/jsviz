@@ -3,6 +3,7 @@ import { highlight, languages } from "prismjs/components/prism-core";
 import { useState } from "react";
 
 import { IoIosArrowDropdownCircle } from "react-icons/io";
+import styles from "./Explainer.module.css";
 
 export default function Explainer() {
   const [expanded, set_expanded] = useState(false);
@@ -10,44 +11,16 @@ export default function Explainer() {
   return (
     <div>
       <h2
-        css={`
-          cursor: pointer;
-          transition: color 0.15s ease;
-          color: #aaa;
-          &:hover {
-            color: #777;
-          }
-          ${expanded && `color: black !important;`}
-        `}
+        className={`${styles.explainerHeader} ${expanded ? styles.expanded : ''}`}
         onClick={() => set_expanded(!expanded)}
       >
         How is it made?{" "}
         <IoIosArrowDropdownCircle
-          css={`
-            vertical-align: text-bottom;
-            margin-bottom: 2px;
-            transition: transform 0.15s ease;
-            ${expanded ? "transform: rotate(180deg);" : ""}
-          `}
+          className={`${styles.arrowIcon} ${expanded ? styles.expanded : ''}`}
         />
       </h2>
       {expanded && (
-        <div
-          css={`
-            animation: Explainer_enter_kf 0.15s ease;
-
-            @keyframes Explainer_enter_kf {
-              from {
-                transform: translate(0, 10px);
-                opacity: 0;
-              }
-              to {
-                transform: translate(0, 0);
-                opacity: 1;
-              }
-            }
-          `}
-        >
+        <div className={styles.explainerContent}>
           <p>
             The tool uses a <a href="https://babeljs.io/">Babel</a> syntax
             transform to add in little "reporter" function calls around most
@@ -92,13 +65,7 @@ export default function Explainer() {
 function Code({ children }) {
   return (
     <pre
-      css={`
-        padding: 10px;
-        border-radius: 4px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-        display: inline-block;
-        margin: 0 0 0 10px;
-      `}
+      className={styles.codeBlock}
       dangerouslySetInnerHTML={{
         __html: highlight(children, languages.js),
       }}

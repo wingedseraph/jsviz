@@ -79,17 +79,29 @@ export default function App() {
 
   useEffect(() => {
     if (worker && !cache[code]) {
-      // Transpile the code in the main thread before sending to worker
-      const transpiled = transform(code, {
-        plugins: [["transpilerPlugin", { ns: "__V__" }]]
-      }).code;
+      try {
+        // Transpile the code in the main thread before sending to worker
+        const transpiled = transform(code, {
+          plugins: [["transpilerPlugin", { ns: "__V__" }]]
+        }).code;
 
-      // Send both the original code and the transpiled code to the worker
-      worker.postMessage({
-        code,
-        transpiled,
-        describeStr: describe.toString() // Send the describe function as a string
-      });
+        // Send both the original code and the transpiled code to the worker
+        worker.postMessage({
+          code,
+          transpiled,
+          describeStr: describe.toString() // Send the describe function as a string
+        });
+      } catch (error) {
+        // Handle syntax errors in the user's code
+        worker.postMessage({
+          code,
+          config: {},
+          error: {
+            message: error.message,
+            type: error.constructor.name
+          }
+        });
+      }
     }
   }, [code, cache, worker]);
 

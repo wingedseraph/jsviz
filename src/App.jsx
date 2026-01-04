@@ -102,17 +102,13 @@ export default function App() {
           error={error}
         />
       </div>
+      <div className="rewrite-editor">
       <div className="Editor">
         <Editor
           value={code}
           onValueChange={set_code}
           highlight={code => <Highlight code={code} step={step} />}
           padding={24}
-          style={{
-            fontFamily: "Menlo, Consolas, monospace",
-            fontSize: 18,
-            lineHeight: 1.5
-          }}
           preClassName="language-js"
           textareaClassName="Code"
         />
@@ -141,6 +137,8 @@ export default function App() {
       ) : (
         <Step />
       )}
+
+</div>
     </div>
   );
 }

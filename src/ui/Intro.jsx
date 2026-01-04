@@ -5,7 +5,7 @@ import { IoIosArrowDroprightCircle } from "react-icons/io";
 
 export default function Intro() {
   return (
-    <div>
+    <div className="hidden">
       <h2>What's this?</h2>
       <p>
         You're looking at a little tool that helps to{" "}

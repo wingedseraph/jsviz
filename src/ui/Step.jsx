@@ -21,7 +21,7 @@ const inspectorTheme = {
 export default function Step({ step = { category: "init" }, logs = [] }) {
   if (step.category === "init") {
     return (
-      <div className="InfoPanelGroup">
+      <div className="InfoPanelGroup hidden">
         <div className="InfoPanel">
           <Intro />
         </div>

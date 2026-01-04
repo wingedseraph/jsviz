@@ -3,9 +3,9 @@ body {
   margin: 0;
   padding: 0;
 
-  font-family: "Work Sans", sans-serif;
-  font-size: 18px;
-  line-height: 1.4;
+  font-family: "JuliaMono Nerd Font Mono", sans-serif;
+  font-size: 14px;
+  line-height: 1.2 !important;
   color: #333;
 }
 
@@ -169,4 +169,27 @@ pre[class*="language-"] {
 
 .token.italic {
   font-style: italic;
+}
+
+.Editor * {
+  hide-scrollbar {
+    -ms-overflow-style: none !important; /* IE and Edge */
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none !important; /* Chrome, Safari, Opera, Edge */
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.rewrite-editor {
+  display: flex;
+  flex-direction: row;
+  // justify-content: space-between;
+}
+.rewrite-editor > div {
+  flex: 1;
 }

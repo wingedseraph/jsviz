@@ -74,7 +74,14 @@ export default function StepSlider({
               onMouseDown={e => {
                 props.onMouseDown(e);
               }}
+              // onTouchStart={e => {
+              //   props.onTouchStart(e);
+              // }}
               onTouchStart={e => {
+                if (e.touches.length > 1) {
+                  e.stopPropagation();   // stops react-range from seeing a "drag"
+                  return;
+                }
                 props.onTouchStart(e);
               }}
               style={props.style}

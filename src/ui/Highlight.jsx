@@ -6,7 +6,7 @@ import React, {
   useCallback
 } from "react";
 
-import { highlight, languages } from "prismjs/components/prism-core";
+import Prism from "prismjs";
 
 import theme from "./theme";
 
@@ -59,9 +59,10 @@ export default function Highlight({ code, step }) {
       <div
         style={{ zIndex: 20 }}
         dangerouslySetInnerHTML={{
-          __html: highlight(
+          __html: Prism.highlight(
             code + (code.split("\n").slice(-1)[0] === "" ? " " : ""),
-            languages.js
+            Prism.languages.javascript,
+            'javascript'
           )
         }}
       />

@@ -7,7 +7,7 @@ export default function useReplacableWorker(onMessage) {
     ref.current = {
       first: !ref.current,
       dead: false,
-      worker: new Worker("/worker/index.js"),
+      worker: new Worker(new URL('../worker/index.js', import.meta.url), { type: 'module' }),
       spawned: Date.now()
     };
     setupWatchDog(ref.current);

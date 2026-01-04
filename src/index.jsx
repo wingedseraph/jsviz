@@ -1,11 +1,18 @@
 import "babel-polyfill";
-import React from "react";
-import { render } from "react-dom";
-
-import "prismjs/components/prism-core";
-import "prismjs/components/prism-clike";
-import "prismjs/components/prism-javascript";
+import React, { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { ErrorBoundary } from "react-error-boundary";
 
 import App from "./App";
 
-render(<App />, document.getElementById("app"));
+const rootElement = document.getElementById("app");
+
+if (rootElement !== null) {
+  createRoot(rootElement).render(
+    <StrictMode>
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
+    </StrictMode>
+  );
+}

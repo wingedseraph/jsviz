@@ -1,4 +1,3 @@
-import "styled-components/macro";
 import React from "react";
 import { ObjectInspector, chromeLight } from "react-inspector";
 
@@ -32,17 +31,7 @@ export default function Step({ step = { category: "init" }, logs = [] }) {
     );
   } else if (step.category === "wait") {
     return (
-      <div
-        css={`
-          border: 3px solid #eee;
-          border-radius: 8px;
-          background: #f5f5f5;
-          color: #555;
-          text-align: center;
-          padding: 3rem;
-          font-size: 1.25rem;
-        `}
-      >
+      <div className="wait-step">
         &hellip;not doing anything for ± {format_dt(step.wait)}
       </div>
     );
@@ -65,7 +54,7 @@ export default function Step({ step = { category: "init" }, logs = [] }) {
                 </strong>{" "}
                 {step.category}
                 <br />
-                <span css="margin-left: 10px;">
+                <span className="step-type-info">
                   (of type <strong>{step.type}</strong>)
                 </span>
               </p>
@@ -92,17 +81,18 @@ export default function Step({ step = { category: "init" }, logs = [] }) {
               const bindings = Object.entries(scope);
               return (
                 <div
-                  css={`
-                    display: inline-block;
-                    margin-top: 10px;
-                    border: 2px solid ${j === 0 ? "black" : "#ccc"};
-                    ${j === 0 && "box-shadow: 0 2px 6px rgba(0, 0, 0, .2);"}
-                    padding: 10px;
-                    border-radius: 4px;
-                  `}
+                  className={`scope-container ${j === 0 ? 'top-scope' : ''}`}
+                  style={{
+                    display: 'inline-block',
+                    marginTop: '10px',
+                    border: `2px solid ${j === 0 ? "black" : "#ccc"}`,
+                    padding: '10px',
+                    borderRadius: '4px',
+                    ...(j === 0 && { boxShadow: '0 2px 6px rgba(0, 0, 0, .2)' })
+                  }}
                 >
                   {bindings.length === 0 && (
-                    <p css="margin: 0;">
+                    <p className="no-variables">
                       <em>(no variables in this scope)</em>
                     </p>
                   )}
@@ -110,6 +100,7 @@ export default function Step({ step = { category: "init" }, logs = [] }) {
                     return (
                       <div
                         key={i}
+                        className="binding-item"
                         style={{
                           display: "flex",
                           flexWrap: "wrap",
@@ -147,7 +138,7 @@ export default function Step({ step = { category: "init" }, logs = [] }) {
               >
                 {items.map((item, i) => {
                   return (
-                    <div key={i} css="margin-right: 16px;">
+                    <div key={i} className="console-item">
                       <ObjectInspector theme={inspectorTheme} data={item} />
                     </div>
                   );

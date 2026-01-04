@@ -1,4 +1,3 @@
-import "styled-components/macro";
 import React, { useRef, useMemo, useEffect, useState } from "react";
 import { Range, getTrackBackground } from "react-range";
 import { IoIosArrowDroprightCircle, IoIosCloseCircle } from "react-icons/io";

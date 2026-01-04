@@ -1,5 +1,4 @@
-import "styled-components/macro";
-import React, { useState, useRef } from "react";
+import { useRef, useState } from "react";
 import { useClickAway } from "react-use";
 
 import theme from "./theme";
@@ -14,7 +13,7 @@ export default function Menu({ items, onSelect, ...props }) {
   return (
     <div {...props} ref={ref}>
       <button
-        onClick={() => set_open(open => !open)}
+        onClick={() => set_open((open) => !open)}
         css={`
           display: flex;
           flex-direction: column;
@@ -64,33 +63,33 @@ export default function Menu({ items, onSelect, ...props }) {
             style={{
               transform: open
                 ? "translate(-6px, -6px) rotate(+45deg)"
-                : "translate(-6px, -8px)"
+                : "translate(-6px, -8px)",
             }}
           />
           <span
             style={{
               transform: open
                 ? "translate(+6px, -6px) rotate(-45deg)"
-                : "translate(+6px, -8px)"
+                : "translate(+6px, -8px)",
             }}
           />
           <span
             style={{
-              transform: open ? "scale(0, 1)" : "scale(1.6, 1)"
+              transform: open ? "scale(0, 1)" : "scale(1.6, 1)",
             }}
           />
           <span
             style={{
               transform: open
                 ? "translate(-6px, +6px) rotate(-45deg)"
-                : "translate(-6px, +8px)"
+                : "translate(-6px, +8px)",
             }}
           />
           <span
             style={{
               transform: open
                 ? "translate(+6px, +6px) rotate(+45deg)"
-                : "translate(+6px, +8px)"
+                : "translate(+6px, +8px)",
             }}
           />
         </span>
@@ -167,7 +166,7 @@ export default function Menu({ items, onSelect, ...props }) {
                   }
                 `}
               >
-                {items.map(item => {
+                {items.map((item) => {
                   return (
                     <li key={item.key}>
                       <button

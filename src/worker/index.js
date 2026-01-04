@@ -1,11 +1,5 @@
-import * as babel from "@babel/core";
-import Vue from 'vue';
-
-import { describe } from "../lib/describe";
-import transpilerPlugin from "./transpile_plugin";
-
-// Make Vue available globally in the worker context
-self.Vue = Vue;
+// Worker that only executes pre-transpiled code
+// The transpilation happens in the main thread
 
 const id = Math.floor(Math.random() * 1000);
 
@@ -15,15 +9,14 @@ setInterval(() => {
   self.postMessage({ alive: id });
 }, 100);
 
-self.onmessage = ({ data: { code, config = {} } }) => {
-  console.debug("compiling...");
+self.onmessage = ({ data: { code, transpiled, config = {}, describeStr } }) => {
+  console.debug("executing...");
   const ns = (config.ns = config.ns || "__V__");
-  try {
-    const transpiled = transpile(code, config);
-    self.describe = describe;
-    // Make Vue available in the execution environment
-    self.Vue = typeof Vue !== 'undefined' ? Vue : (typeof globalThis !== 'undefined' && globalThis.Vue ? globalThis.Vue : undefined);
 
+  // Define describe function from string
+  self.describe = eval(`(${describeStr})`);
+
+  try {
     let getSteps = eval(`
       (((undefined) => {
         const console = new (class console {
@@ -40,9 +33,6 @@ self.onmessage = ({ data: { code, config = {} } }) => {
         };
         ${ns}.describe = self.describe;
         ${ns}.cache = {};
-        // Make Vue available in the execution context
-        ${ns}.Vue = typeof self !== 'undefined' && self.Vue ? self.Vue :
-                   (typeof globalThis !== 'undefined' && globalThis.Vue ? globalThis.Vue : undefined);
         ${ns}.report = function(value, meta) {
           meta.dt = Date.now() - ${ns}._t0;
           meta.num = ${ns}._steps.push(meta) - 1;
@@ -83,7 +73,7 @@ self.onmessage = ({ data: { code, config = {} } }) => {
           code,
           transpiled,
           config,
-          steps: JSON.stringify(steps)
+          steps: JSON.stringify(steps),
         });
       }
     }
@@ -93,16 +83,8 @@ self.onmessage = ({ data: { code, config = {} } }) => {
     console.debug("  ERR", error);
     const {
       message,
-      constructor: { name: type }
+      constructor: { name: type },
     } = error;
     self.postMessage({ code, config, error: { message, type } });
   }
 };
-
-function transpile(code, config) {
-  const transpiled = babel.transformSync(code, {
-    plugins: [[transpilerPlugin, config]]
-  });
-
-  return transpiled.code;
-}

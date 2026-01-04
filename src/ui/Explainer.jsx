@@ -1,7 +1,6 @@
-import "styled-components/macro";
-import React, { useState } from "react";
 import { stripIndent } from "common-tags";
 import { highlight, languages } from "prismjs/components/prism-core";
+import { useState } from "react";
 
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 
@@ -101,7 +100,7 @@ function Code({ children }) {
         margin: 0 0 0 10px;
       `}
       dangerouslySetInnerHTML={{
-        __html: highlight(children, languages.js)
+        __html: highlight(children, languages.js),
       }}
     />
   );

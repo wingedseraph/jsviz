@@ -21,7 +21,7 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       input: {
-        main: './src/index.html',
+        main: './index.html',
         worker: './src/worker/index.js'
       },
       output: {
@@ -33,9 +33,16 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['react', 'react-dom'],
+    esbuildOptions: {
+      define: {
+        global: 'globalThis',
+      },
+    },
   },
   worker: {
     format: 'es'
+  },
+  define: {
+    global: 'globalThis',
   }
 });
-

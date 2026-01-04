@@ -208,10 +208,13 @@ pre[class*="language-"] {
 }
 #app > div > div.rewrite-editor > div.Editor > div > pre > div {
   overflow: hidden !important;
-  white-space: pre-wrap !important;
+  // white-space: pre-wrap !important;
 }
 
-body {
+.Editor {
   // zoom: 150% !important;
-  font-size: 3rem;
+  font-size: 1.5rem;
+}
+.InfoPanel span {
+  font-size: 2rem !important;
 }

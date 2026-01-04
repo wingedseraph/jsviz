@@ -208,7 +208,7 @@ pre[class*="language-"] {
 }
 #app > div > div.rewrite-editor > div.Editor > div > pre > div {
   overflow: hidden !important;
-  white-space: pre-wrap;
+  white-space: pre-wrap !important;
 }
 
 body {

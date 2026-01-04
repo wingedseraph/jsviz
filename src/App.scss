@@ -284,7 +284,8 @@ html {
     justify-content: space-between;
     gap: 10px;
 
-    .cancel-button, .save-preset-button {
+    .cancel-button,
+    .save-preset-button {
       flex: 1;
       padding: 8px 16px;
       border: none;
@@ -306,4 +307,77 @@ html {
       }
     }
   }
+}
+
+/* Tabs interface styles */
+.visualization-container {
+  width: 100%;
+}
+
+.tab-nav {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  background-color: transparent;
+}
+
+.tab-nav-btn {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  color: #333;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
+
+  &.active {
+    font-weight: normal;
+    color: #000;
+  }
+}
+
+.tab-content {
+  padding: 15px;
+  border: none;
+  min-height: 300px;
+  background-color: transparent;
+}
+
+.tabs-controls {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tab-btn {
+  padding: 5px 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  color: #333;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
+
+  &.active {
+    background-color: #f8f9fa;
+    color: #000;
+  }
+}
+
+.all-in-one-view {
+  width: 100%;
+}
+
+
+.iframe-container {
+  margin-top: 16px;
 }

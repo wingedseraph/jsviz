@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Visualization Sandbox</title>
+</head>
+<body>
+    <script>
+        // This script will be replaced with the transpiled user code
+        // The transpiled code will include step reporting via postMessage
+        
+        // Set up the step reporting system in the iframe context
+        (function() {
+            const __V__ = {
+                _t0: Date.now(),
+                _steps: [ { category: "init" } ],
+                _updated: false,
+                _logs: [],
+                _tmp: {}
+            };
+            
+            // Function to send step reports to the parent window
+            __V__.report = function(value, meta) {
+                meta.dt = Date.now() - __V__._t0;
+                meta.num = __V__._steps.push(meta) - 1;
+                meta.value = __V__.describe(value);
+                meta.logs = __V__._logs;
+                __V__._logs = [];
+                __V__._updated = true;
+                
+                // Send step data to parent window
+                window.parent.postMessage({
+                    type: 'step',
+                    step: meta,
+                    value: value,
+                    logs: meta.logs,
+                    allSteps: [...__V__._steps],
+                    updated: __V__._updated
+                }, '*');
+                
+                return value;
+            };
+            
+            // Placeholder for the describe function - will be replaced with actual function
+            __V__.describe = function(value) {
+                // This will be replaced with the actual describe function from the main thread
+                return JSON.stringify(value);
+            };
+            
+            __V__.cache = {};
+            
+            // Make the __V__ object available globally in the iframe
+            window.__V__ = __V__;
+        })();
+    </script>
+</body>
+</html>

@@ -26,6 +26,7 @@ import Step from "./ui/Step";
 import StepSlider from "./ui/StepSlider";
 
 import "./App.scss";
+import './prism-one-light.css'
 
 export default function App() {
   // Load the latest session from localStorage on initial load, fallback to default preset

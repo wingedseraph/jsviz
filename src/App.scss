@@ -151,14 +151,14 @@ pre[class*="language-"] {
 .token.attr-name,
 .language-autohotkey .token.selector {
   font-weight: bold;
-  text-decoration: underline;
-  /* font-style: italic; */
+  // text-decoration: underline;
+  font-style: italic;
 }
 
 .token.function,
 .token.deleted,
 .language-autohotkey .token.tag {
-  /* color: #9a050f; */
+  //  color: #9a050f;
 }
 
 .token.important,

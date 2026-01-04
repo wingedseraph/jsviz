@@ -2,6 +2,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import prism from 'vite-plugin-prismjs';
 
+// Available Prism.js themes:
+// 'default', 'coy', 'dark', 'funky', 'okaidia', 'solarizedlight', 'tomorrow', 'twilight'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -9,8 +11,8 @@ export default defineConfig({
     prism({
       languages: ['javascript', 'clike'],
       plugins: [],
-      theme: 'default',
-      css: true,
+      theme: 'funky',
+      css: false,  // Disable default CSS to use custom theme
     }),
   ],
   server: {

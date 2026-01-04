@@ -215,6 +215,16 @@ pre[class*="language-"] {
   // zoom: 150% !important;
   font-size: 1.5rem;
 }
+
+.InfoPanel p,
 .InfoPanel span {
   font-size: 2rem !important;
+}
+html {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera, Edge */
 }

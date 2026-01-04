@@ -82,15 +82,31 @@ const zoomLevel = useBrowserZoom();
   const step =
     steps && steps[Math.max(0, Math.min(steps.length - 1, Math.round(at)))];
 
+  // State for the custom save prompt
+  const [showSavePrompt, setShowSavePrompt] = useState(false);
+  const [presetName, setPresetName] = useState("");
+
   // Function to save current script to localStorage
   const saveCurrentScript = () => {
-    const presetName = prompt("Enter a name for your preset:");
+    setShowSavePrompt(true);
+    setPresetName("");
+  };
+
+  // Function to handle saving the preset
+  const handleSavePreset = () => {
     if (presetName && code.trim()) {
       presets.savePresetToStorage(presetName, code);
-      // Update the presets object to include the new preset
-      // This will cause a re-render with the new preset in the menu
-      window.location.reload(); // Simple way to refresh presets after saving
+      setShowSavePrompt(false);
+      setPresetName("");
+      // Simple way to refresh presets after saving
+      window.location.reload();
     }
+  };
+
+  // Function to cancel saving
+  const handleCancelSave = () => {
+    setShowSavePrompt(false);
+    setPresetName("");
   };
 
   return (
@@ -140,6 +156,80 @@ const zoomLevel = useBrowserZoom();
         >
           save
         </button>
+
+        {/* Custom Save Prompt Modal */}
+        {showSavePrompt && (
+          <div
+            css={`
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-color: rgba(0, 0, 0, 0.5);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              z-index: 1000;
+            `}
+          >
+            <div
+              css={`
+                background: white;
+                padding: 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                min-width: 300px;
+              `}
+            >
+              <p>Enter a name for your preset:</p>
+              <input
+                type="text"
+                value={presetName}
+                onChange={(e) => setPresetName(e.target.value)}
+                css={`
+                  width: 100%;
+                  padding: 0.5rem;
+                  margin-bottom: 1rem;
+                  border: 1px solid #ccc;
+                  border-radius: 4px;
+                  box-sizing: border-box;
+                  outline:none;
+                `}
+                placeholder="Preset name"
+                autoFocus
+              />
+              <div css="display: flex; justify-content: flex-end; gap: 0.5rem;">
+                <button
+                  css={`
+                    padding: 0.5rem 1rem;
+                    background: transparent;
+                    color: color;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                  `}
+                  onClick={handleCancelSave}
+                >
+                  Cancel
+                </button>
+                <button
+                  css={`
+                    padding: 0.5rem 1rem;
+                    background: transparent;
+                    color: color;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                  `}
+                  onClick={handleSavePreset}
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       <div className="rewrite-editor">
       <div className="Editor">

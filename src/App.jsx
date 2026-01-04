@@ -10,6 +10,7 @@ import presets from "./lib/presets";
 import useCode from "./lib/useCode";
 import useMostRecent from "./lib/useMostRecent";
 import useReplacableWorker from "./lib/useReplacableWorker";
+import useBrowserZoom from "./lib/useBrowserZoom";
 
 import StepSlider from "./ui/StepSlider";
 import Highlight from "./ui/Highlight";
@@ -21,6 +22,8 @@ import "./App.scss";
 export default function App() {
   const [code, set_code] = useCode(presets["Promise / fetch"]);
   const [cache, set_cache] = useState({});
+const zoomLevel = useBrowserZoom();
+  const scalePercentage = Math.round(zoomLevel * 100)
 
   const worker = useReplacableWorker(data => {
     if (!data.error) {
@@ -139,6 +142,7 @@ export default function App() {
       )}
 
 </div>
+<p>{scalePercentage}</p>
     </div>
   );
 }

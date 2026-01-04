@@ -188,10 +188,23 @@ pre[class*="language-"] {
 .rewrite-editor {
   display: flex;
   flex-direction: row;
-  // justify-content: space-between;
+  gap: clamp(1rem, 2vw, 2rem);
 }
+
 .rewrite-editor > div {
   flex: 1;
+  min-width: clamp(280px, 30vw, 400px);
+}
+
+@media (max-width: 768px) {
+  .rewrite-editor {
+    flex-direction: column;
+  }
+
+  .rewrite-editor > div {
+    min-width: auto;
+    width: 100%;
+  }
 }
 #app > div > div.rewrite-editor > div.Editor > div > pre > div {
   overflow: hidden !important;

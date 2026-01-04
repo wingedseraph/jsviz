@@ -45,7 +45,7 @@
 
 .menuDropdown {
   position: absolute;
-  top: 4px;
+  top: 100%;
   left: 0;
   min-width: 240px;
   z-index: 50;
@@ -102,4 +102,3 @@
   background: #eee;
 }
 
-/* Note: Dynamic colors are handled with inline styles */

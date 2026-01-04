@@ -20,7 +20,9 @@ import Step from "./ui/Step";
 import "./App.scss";
 
 export default function App() {
-  const [code, set_code] = useCode(presets["Promise / fetch"]);
+  // Load the latest session from localStorage on initial load, fallback to default preset
+  const initialCode = localStorage.getItem('js_visualized_last_session') || presets["Promise / fetch"];
+  const [code, set_code] = useCode(initialCode);
   const [cache, set_cache] = useState({});
 const zoomLevel = useBrowserZoom();
   const scalePercentage = Math.round(zoomLevel * 100)
@@ -55,6 +57,16 @@ const zoomLevel = useBrowserZoom();
     });
   });
 
+  // Periodically save the current script to localStorage (every 2 seconds)
+  useEffect(() => {
+    const saveInterval = setInterval(() => {
+      localStorage.setItem('js_visualized_last_session', code);
+    }, 2000); // Save every 2 seconds
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(saveInterval);
+  }, [code]);
+
   useEffect(() => {
     if (worker && !cache[code]) {
       worker.postMessage({ code });
@@ -70,6 +82,17 @@ const zoomLevel = useBrowserZoom();
   const step =
     steps && steps[Math.max(0, Math.min(steps.length - 1, Math.round(at)))];
 
+  // Function to save current script to localStorage
+  const saveCurrentScript = () => {
+    const presetName = prompt("Enter a name for your preset:");
+    if (presetName && code.trim()) {
+      presets.savePresetToStorage(presetName, code);
+      // Update the presets object to include the new preset
+      // This will cause a re-render with the new preset in the menu
+      window.location.reload(); // Simple way to refresh presets after saving
+    }
+  };
+
   return (
     <div className="App">
       <div
@@ -80,7 +103,7 @@ const zoomLevel = useBrowserZoom();
       >
         <Menu
           css="margin-right: 1rem;"
-          items={Object.entries(presets).map(([title, preset_code]) => {
+          items={Object.entries(presets).filter(([key]) => key !== 'savePresetToStorage' && key !== 'removePresetFromStorage').map(([title, preset_code]) => {
             return {
               key: title,
               title,
@@ -104,6 +127,19 @@ const zoomLevel = useBrowserZoom();
           loading={loading}
           error={error}
         />
+        <button
+          css={`
+            cursor: pointer;
+            border: none;
+            outline: none;
+            color:black;
+            background:transparent;
+            font-size: 2rem;
+          `}
+          onClick={saveCurrentScript}
+        >
+          save
+        </button>
       </div>
       <div className="rewrite-editor">
       <div className="Editor">

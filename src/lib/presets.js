@@ -1,6 +1,45 @@
 import stripIndent from "common-tags/lib/stripIndent";
 
-export default {
+// Load presets from localStorage, fallback to default presets
+const loadPresetsFromStorage = () => {
+  try {
+    const stored = localStorage.getItem('js_visualized_presets');
+    if (stored) {
+      return { ...defaultPresets, ...JSON.parse(stored) };
+    }
+  } catch (e) {
+    console.warn('Failed to load presets from localStorage:', e);
+  }
+  return defaultPresets;
+};
+
+// Save a new preset to localStorage
+const savePresetToStorage = (name, code) => {
+  try {
+    const currentPresets = localStorage.getItem('js_visualized_presets');
+    const presets = currentPresets ? JSON.parse(currentPresets) : {};
+    presets[name] = code;
+    localStorage.setItem('js_visualized_presets', JSON.stringify(presets));
+  } catch (e) {
+    console.error('Failed to save preset to localStorage:', e);
+  }
+};
+
+// Remove a preset from localStorage
+const removePresetFromStorage = (name) => {
+  try {
+    const currentPresets = localStorage.getItem('js_visualized_presets');
+    if (currentPresets) {
+      const presets = JSON.parse(currentPresets);
+      delete presets[name];
+      localStorage.setItem('js_visualized_presets', JSON.stringify(presets));
+    }
+  } catch (e) {
+    console.error('Failed to remove preset from localStorage:', e);
+  }
+};
+
+const defaultPresets = {
   "Basic for-loop": stripIndent`
     for (let i = 0; i < 5; i++) {
       console.log(i);
@@ -147,7 +186,6 @@ export default {
     let i;
     i = 0; ++i;
     i = 0; i++;
-    i = 0; ++i + ++i;
     i = 0; i++ + i++;
 
     let o = {};
@@ -156,4 +194,10 @@ export default {
     o.i = 0; ++o.i + ++o.i;
     o.i = 0; o.i++ + o.i++;
   `
+};
+
+export default {
+  ...loadPresetsFromStorage(),
+  savePresetToStorage,
+  removePresetFromStorage
 };

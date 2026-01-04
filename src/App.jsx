@@ -61,7 +61,7 @@ const zoomLevel = useBrowserZoom();
   useEffect(() => {
     const saveInterval = setInterval(() => {
       localStorage.setItem('js_visualized_last_session', code);
-    }, 2000); // Save every 2 seconds
+    }, 10000);/
 
     // Cleanup interval on component unmount
     return () => clearInterval(saveInterval);

@@ -193,7 +193,7 @@ pre[class*="language-"] {
 
 .rewrite-editor > div {
   flex: 1;
-  min-width: clamp(280px, 30vw, 400px);
+  // min-width: clamp(280px, 30vw, 400px);
 }
 
 @media (max-width: 768px) {

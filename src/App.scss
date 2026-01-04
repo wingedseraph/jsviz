@@ -193,3 +193,7 @@ pre[class*="language-"] {
 .rewrite-editor > div {
   flex: 1;
 }
+#app > div > div.rewrite-editor > div.Editor > div > pre > div {
+  overflow: hidden !important;
+  white-space: pre-wrap;
+}

@@ -24,7 +24,7 @@ export default function Menu({ items, onSelect, ...props }) {
           padding: 0;
 
           width: 44px;
-          height: 44px;
+          height: 88px;
           background: none;
           border: 2px solid transparent;
           border-radius: 4px;

@@ -74,19 +74,19 @@ export default function StepSlider({
               onMouseDown={e => {
                 props.onMouseDown(e);
               }}
-              // onTouchStart={e => {
-              //   props.onTouchStart(e);
-              // }}
               onTouchStart={e => {
-                if (e.touches.length > 1) {
-                  e.stopPropagation();   // stops react-range from seeing a "drag"
-                  return;
-                }
                 props.onTouchStart(e);
               }}
+              // onTouchStart={e => {
+              //   if (e.touches.length > 1) {
+              //     e.stopPropagation();   // stops react-range from seeing a "drag"
+              //     return;
+              //   }
+              //   props.onTouchStart(e);
+              // }}
               style={props.style}
               css={`
-                height: 44px;
+                height: 88px;
                 display: flex;
                 width: 100%;
               `}
@@ -94,7 +94,7 @@ export default function StepSlider({
               <div
                 ref={props.ref}
                 css={`
-                  height: 40px;
+                  height: 80px;
                   width: 100%;
                   align-self: center;
                   position: relative;

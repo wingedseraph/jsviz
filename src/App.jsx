@@ -142,7 +142,7 @@ const zoomLevel = useBrowserZoom();
       )}
 
 </div>
-<p>{scalePercentage}</p>
+<p style={{opacity:'0'}}>{scalePercentage}</p>
     </div>
   );
 }

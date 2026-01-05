@@ -15,18 +15,17 @@ import presets from "./lib/presets";
 
 import useBrowserZoom from "./lib/useBrowserZoom";
 import useCode from "./lib/useCode";
+import useCodeHighlight from "./lib/useCodeHighlight";
 import useMostRecent from "./lib/useMostRecent";
 import useReplacableWorker from "./lib/useReplacableWorker";
-import useCodeHighlight from "./lib/useCodeHighlight";
 
 import Menu from "./ui/Menu";
 import Step from "./ui/Step";
 import StepSlider from "./ui/StepSlider";
-import theme from "./ui/theme";
 
 import "./App.scss";
-import "./prism-one-light.css";
 import "./monaco-highlight.css";
+import "./prism-one-light.css";
 
 export default function App() {
   // Load the latest session from localStorage on initial load, fallback to default preset
@@ -420,7 +419,6 @@ g                           const newObj = {};
     monacoRef.current = monaco;
   };
 
-
   // State for the custom save prompt
   const [showSavePrompt, setShowSavePrompt] = useState(false);
   const [presetName, setPresetName] = useState("");
@@ -467,7 +465,7 @@ g                           const newObj = {};
         eval_code: true,
         unescape_strings: false,
         wrap_line_length: 100,
-        comma_first: true
+        comma_first: true,
       });
 
       set_code(formattedCode);
@@ -564,8 +562,9 @@ g                           const newObj = {};
           /> */}
           <Editor
             height="500px"
+            width="50vw"
             language="javascript"
-            theme="vs-light"
+            theme="light"
             value={code}
             onChange={set_code}
             onMount={handleEditorDidMount}
@@ -577,6 +576,10 @@ g                           const newObj = {};
               minimap: { enabled: false },
               scrollBeyondLastLine: false,
               automaticLayout: true,
+              scrollbar: { horizontal: "hidden", vertical: "hidden" },
+              overviewRulerBorder: true,
+              overviewRulerLanes: 0,
+              renderLineHighlight: "none",
             }}
           />
         </div>
@@ -586,11 +589,12 @@ g                           const newObj = {};
               <h2 className="error-title">Uh oh!</h2>
               <pre className="error-message">
                 {typeof error === "object"
-                  ? `${"type" in error ? `${error.type}: ` : ``}${error.message
-                  }`
+                  ? `${"type" in error ? `${error.type}: ` : ``}${
+                      error.message
+                    }`
                   : typeof error === "string"
-                    ? error
-                    : null}
+                  ? error
+                  : null}
               </pre>
             </div>
           </div>

@@ -1,7 +1,9 @@
 import { registerPlugin, transform } from "@babel/standalone";
 import js_beautify from "js-beautify";
-import { useEffect, useState } from "react";
-import Editor from "react-simple-code-editor";
+import { useEffect, useRef, useState } from "react";
+// import Editor from "react-simple-code-editor";
+import Editor from "@monaco-editor/react";
+
 import { useThrottle } from "react-use";
 import transpilerPlugin from "./worker/transpile_plugin";
 
@@ -15,14 +17,16 @@ import useBrowserZoom from "./lib/useBrowserZoom";
 import useCode from "./lib/useCode";
 import useMostRecent from "./lib/useMostRecent";
 import useReplacableWorker from "./lib/useReplacableWorker";
+import useCodeHighlight from "./lib/useCodeHighlight";
 
-import Highlight from "./ui/Highlight";
 import Menu from "./ui/Menu";
 import Step from "./ui/Step";
 import StepSlider from "./ui/StepSlider";
+import theme from "./ui/theme";
 
 import "./App.scss";
 import "./prism-one-light.css";
+import "./monaco-highlight.css";
 
 export default function App() {
   // Load the latest session from localStorage on initial load, fallback to default preset
@@ -87,7 +91,7 @@ export default function App() {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedCode(code);
-    }, 1000); // 1000ms delay
+    }, 100); // 1000ms delay
 
     return () => {
       clearTimeout(handler);
@@ -266,8 +270,8 @@ export default function App() {
                             return '[Function: ' + (val.name || 'anonymous') + ']';
                           }
                           // Handle objects with functions in them by removing functions
-                          if (val && typeof val === 'object' && !val.toJSON) {
-                            const newObj = {};
+                          if (val && typeof val === 'object' && !val.toJSON) g
+g                           const newObj = {};
                             for (const k in val) {
                               if (val.hasOwnProperty(k)) {
                                 const propVal = val[k];
@@ -406,7 +410,16 @@ export default function App() {
   const step =
     steps && steps[Math.max(0, Math.min(steps.length - 1, Math.round(at)))];
 
-  // Only show all-in-one view (no tabs)
+  const editorRef = useRef(null);
+  const monacoRef = useRef(null);
+
+  useCodeHighlight(editorRef, monacoRef, step);
+
+  const handleEditorDidMount = (editor, monaco) => {
+    editorRef.current = editor;
+    monacoRef.current = monaco;
+  };
+
 
   // State for the custom save prompt
   const [showSavePrompt, setShowSavePrompt] = useState(false);
@@ -532,7 +545,7 @@ export default function App() {
       </div>
       <div className="rewrite-editor">
         <div className="Editor">
-          <div className="format-button-container">
+          {/* <div className="format-button-container">
             <button
               className="format-button"
               onClick={formatCode}
@@ -540,14 +553,31 @@ export default function App() {
             >
               Format
             </button>
-          </div>
-          <Editor
+          </div> */}
+          {/* <Editor
             value={code}
             onValueChange={set_code}
             highlight={(code) => <Highlight code={code} step={step} />}
             padding={24}
             preClassName="language-js"
             textareaClassName="Code"
+          /> */}
+          <Editor
+            height="500px"
+            language="javascript"
+            theme="vs-light"
+            value={code}
+            onChange={set_code}
+            onMount={handleEditorDidMount}
+            options={{
+              inlineSuggest: true,
+              fontSize: "16px",
+              formatOnType: true,
+              autoClosingBrackets: true,
+              minimap: { enabled: false },
+              scrollBeyondLastLine: false,
+              automaticLayout: true,
+            }}
           />
         </div>
         {error ? (
@@ -556,12 +586,11 @@ export default function App() {
               <h2 className="error-title">Uh oh!</h2>
               <pre className="error-message">
                 {typeof error === "object"
-                  ? `${"type" in error ? `${error.type}: ` : ``}${
-                      error.message
-                    }`
+                  ? `${"type" in error ? `${error.type}: ` : ``}${error.message
+                  }`
                   : typeof error === "string"
-                  ? error
-                  : null}
+                    ? error
+                    : null}
               </pre>
             </div>
           </div>
@@ -601,9 +630,10 @@ export default function App() {
                         .slice(0, step.num + 1)
                         .map((s) => s.logs || [])
                         .flat()}
+                      code={code}
                     />
                   ) : (
-                    <Step />
+                    <Step code={code} />
                   )}
                 </div>
               </div>

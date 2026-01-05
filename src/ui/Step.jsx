@@ -17,7 +17,7 @@ const inspectorTheme = {
   TREENODE_LINE_HEIGHT: 1.5
 };
 
-export default function Step({ step = { category: "init" }, logs = [] }) {
+export default function Step({ step = { category: "init" }, logs = [], code = "" }) {
   if (step.category === "init") {
     return (
       <div className="InfoPanelGroup hidden">
@@ -148,6 +148,15 @@ export default function Step({ step = { category: "init" }, logs = [] }) {
               </div>
             );
           })}
+        </div>
+        <div className="InfoPanel">
+          <h2>Current Code</h2>
+          <pre className="current-code">
+            {code}
+          </pre>
+          <div className="debug-info" style={{ fontSize: '10px', color: '#666', marginTop: '10px' }}>
+            Code length: {code.length} characters
+          </div>
         </div>
       </div>
     );

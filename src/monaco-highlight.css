@@ -1,0 +1,17 @@
+.monaco-about-to-execute-code {
+  background-color: rgba(
+    251,
+    241,
+    160,
+    0.4
+  ) !important; /* Yellow highlight for about to execute (same as theme yellow #fbf1a0) */
+}
+
+.monaco-current-execution-code {
+  background-color: rgba(
+    77,
+    212,
+    170,
+    0.4
+  ) !important; /* Teal highlight for currently executing (same as theme teal #4dd4aa) */
+}

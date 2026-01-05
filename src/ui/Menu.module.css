@@ -11,15 +11,18 @@
   padding: 0;
   width: 44px;
   height: 88px;
-  background: none;
-  border: 2px solid transparent;
-  border-radius: 4px;
+  background: transparent;
+  border: none;
   cursor: pointer;
   outline: none;
+  text-decoration: underline;
+  text-decoration-style: dotted;
 }
 
+.menuButton:hover,
 .menuButton:focus {
-  background: #eee;
+  color: #000;
+  text-decoration: underline;
 }
 
 .center {
@@ -85,8 +88,8 @@
   display: block;
   box-sizing: border-box;
   width: 100%;
-  border: 2px solid transparent;
-  background: none;
+  border: none;
+  background: transparent;
   margin: 0;
   padding: 0.3rem 1rem;
   white-space: nowrap;
@@ -95,10 +98,13 @@
   font-size: 0.9rem;
   cursor: pointer;
   outline: none;
+  text-decoration: underline;
+  text-decoration-style: dotted;
 }
 
 .menuList button:hover,
 .menuList button:focus {
-  background: #eee;
+  color: #000;
+  text-decoration: underline;
 }
 

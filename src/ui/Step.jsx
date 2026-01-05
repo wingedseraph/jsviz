@@ -38,6 +38,7 @@ export default function Step({ step = { category: "init" }, logs = [] }) {
   } else {
     return (
       <div className="InfoPanelGroup">
+        <div className="custom-panel-group">
         <div className="InfoPanel">
           <h2>Step</h2>
           {step.time && step.category && step.type && (
@@ -120,6 +121,7 @@ export default function Step({ step = { category: "init" }, logs = [] }) {
               );
             }, <div />)}
         </div>
+</div>
         <div className="InfoPanel">
           <h2>Console</h2>
           {logs.map((items, i) => {

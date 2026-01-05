@@ -38,6 +38,7 @@ h6 {
 
 .Editor {
   margin: 16px -24px;
+  position: relative;
 }
 
 .Code {
@@ -237,8 +238,18 @@ html {
   outline: none;
   border: none;
   background-color: transparent;
-  color: black;
+  color: #333;
   cursor: pointer;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: normal;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+
+  &:hover {
+    color: #000;
+    text-decoration: underline;
+  }
 }
 
 .modal-overlay {
@@ -289,21 +300,25 @@ html {
       flex: 1;
       padding: 8px 16px;
       border: none;
-      background: none;
+      background: transparent;
       cursor: pointer;
       font-size: 14px;
-      border-radius: 4px;
+      font-weight: normal;
+      text-decoration: underline;
+      text-decoration-style: dotted;
     }
 
     .cancel-button {
       &:hover {
-        background-color: #f8f9fa;
+        color: #000;
+        text-decoration: underline;
       }
     }
 
     .save-preset-button {
       &:hover {
-        background-color: #f8f9fa;
+        color: #000;
+        text-decoration: underline;
       }
     }
   }
@@ -318,6 +333,7 @@ html {
   display: flex;
   border-bottom: 1px solid #ddd;
   background-color: transparent;
+  margin-bottom: 10px;
 }
 
 .tab-nav-btn {
@@ -326,17 +342,21 @@ html {
   background: transparent;
   cursor: pointer;
   font-size: 14px;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s ease;
+  border-bottom: 1px solid transparent;
   color: #333;
+  font-weight: normal;
+  text-decoration: underline;
+  text-decoration-style: dotted;
 
   &:hover {
-    background-color: #f8f9fa;
+    color: #000;
+    text-decoration: underline;
   }
 
   &.active {
-    font-weight: normal;
     color: #000;
+    text-decoration: underline;
+    border-bottom: 1px solid #000;
   }
 }
 
@@ -366,18 +386,65 @@ html {
   &:hover {
     background-color: #f8f9fa;
   }
-
-  &.active {
-    background-color: #f8f9fa;
-    color: #000;
-  }
 }
 
 .all-in-one-view {
   width: 100%;
+  display: flex;
 }
-
 
 .iframe-container {
   margin-top: 16px;
+}
+
+.format-button-container {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 10;
+}
+
+.format-button {
+  background-color: transparent;
+  border: none;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #333;
+  background-color: transparent;
+  font-weight: normal;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+
+  &:hover {
+    color: #000;
+    text-decoration: underline;
+  }
+}
+
+/* Update tab styles to be more minimalist like modal */
+.tab-nav-btn {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  color: #333;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
+
+  &.active {
+    font-weight: normal;
+    color: #000;
+    border-bottom: 2px solid #000;
+  }
+}
+
+.custom-panel-group {
+  display: flex;
+  flex-direction: row;
 }

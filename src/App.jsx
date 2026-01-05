@@ -1,7 +1,8 @@
 import { registerPlugin, transform } from "@babel/standalone";
+import js_beautify from "js-beautify";
 import { useEffect, useState } from "react";
 import Editor from "react-simple-code-editor";
-import { useThrottle, useDebounce } from "react-use";
+import { useThrottle } from "react-use";
 import transpilerPlugin from "./worker/transpile_plugin";
 
 registerPlugin("transpilerPlugin", transpilerPlugin);
@@ -96,7 +97,8 @@ export default function App() {
   useEffect(() => {
     // Check if user wants to enable iframe execution for web APIs
     const useIframe =
-      debouncedCode.includes("// @iframe") || debouncedCode.includes("// @use-iframe");
+      debouncedCode.includes("// @iframe") ||
+      debouncedCode.includes("// @use-iframe");
 
     if (!cache[debouncedCode]) {
       if (useIframe) {
@@ -356,7 +358,12 @@ export default function App() {
             const stepsArray = Array.isArray(allSteps) ? allSteps : [];
             const processedSteps = stepsArray.map((step, index) => {
               // If step already has the expected format, return as is
-              if (step && typeof step === 'object' && step.value !== undefined && step.logs !== undefined) {
+              if (
+                step &&
+                typeof step === "object" &&
+                step.value !== undefined &&
+                step.logs !== undefined
+              ) {
                 return step;
               }
               // Otherwise, format it to match the expected structure
@@ -399,9 +406,7 @@ export default function App() {
   const step =
     steps && steps[Math.max(0, Math.min(steps.length - 1, Math.round(at)))];
 
-  // State for tabs
-  const [activeTab, setActiveTab] = useState("all"); // 'steps', 'scope', 'console', or 'all'
-  const [showTabs, setShowTabs] = useState(true); // Whether to show tabs or all in one
+  // Only show all-in-one view (no tabs)
 
   // State for the custom save prompt
   const [showSavePrompt, setShowSavePrompt] = useState(false);
@@ -428,6 +433,34 @@ export default function App() {
   const handleCancelSave = () => {
     setShowSavePrompt(false);
     setPresetName("");
+  };
+
+  // Function to format the code
+  const formatCode = () => {
+    try {
+      // Use js-beautify to format the JavaScript code
+      const formattedCode = js_beautify.js(code, {
+        indent_size: 2,
+        space_in_empty_paren: false,
+        preserve_newlines: false,
+        max_preserve_newlines: 2,
+        jslint_happy: true,
+        space_after_anon_function: false,
+        brace_style: "preserve-inline",
+        keep_array_indentation: true,
+        keep_function_indentation: true,
+        space_before_conditional: true,
+        break_chained_methods: true,
+        eval_code: true,
+        unescape_strings: false,
+        wrap_line_length: 100,
+        comma_first: true
+      });
+
+      set_code(formattedCode);
+    } catch (error) {
+      console.error("Error formatting code: " + error.message);
+    }
   };
 
   return (
@@ -499,6 +532,15 @@ export default function App() {
       </div>
       <div className="rewrite-editor">
         <div className="Editor">
+          <div className="format-button-container">
+            <button
+              className="format-button"
+              onClick={formatCode}
+              title="Format code"
+            >
+              Format
+            </button>
+          </div>
           <Editor
             value={code}
             onValueChange={set_code}
@@ -549,336 +591,27 @@ export default function App() {
           </div>
         ) : (
           <div className="visualization-container">
-            {showTabs ? (
-              // Tabbed interface
-              <div className="tabs-interface">
-                {/* Tab buttons */}
-                <div
-                  className="tab-nav"
-                  style={{ display: "flex", borderBottom: "1px solid #ccc" }}
-                >
-                  <button
-                    className={`tab-nav-btn ${
-                      activeTab === "steps" ? "active" : ""
-                    }`}
-                    onClick={() => setActiveTab("steps")}
-                    style={{
-                      padding: "8px 16px",
-                      border: "none",
-                      background: activeTab === "steps" ? "#e9ecef" : "white",
-                      cursor: "pointer",
-                      fontWeight: activeTab === "steps" ? "bold" : "normal",
-                    }}
-                  >
-                    Steps
-                  </button>
-                  <button
-                    className={`tab-nav-btn ${
-                      activeTab === "scope" ? "active" : ""
-                    }`}
-                    onClick={() => setActiveTab("scope")}
-                    style={{
-                      padding: "8px 16px",
-                      border: "none",
-                      background: activeTab === "scope" ? "#e9ecef" : "white",
-                      cursor: "pointer",
-                      fontWeight: activeTab === "scope" ? "bold" : "normal",
-                    }}
-                  >
-                    Scope
-                  </button>
-                  <button
-                    className={`tab-nav-btn ${
-                      activeTab === "console" ? "active" : ""
-                    }`}
-                    onClick={() => setActiveTab("console")}
-                    style={{
-                      padding: "8px 16px",
-                      border: "none",
-                      background: activeTab === "console" ? "#e9ecef" : "white",
-                      cursor: "pointer",
-                      fontWeight: activeTab === "console" ? "bold" : "normal",
-                    }}
-                  >
-                    Console
-                  </button>
-                </div>
-
-                {/* Tab content */}
-                <div
-                  className="tab-content"
-                  style={{ padding: "10px", border: "none" }}
-                >
-                  {activeTab === "steps" && (
-                    <div>
-                      {step ? (
-                        <Step step={step} logs={[]} />
-                      ) : (
-                        <Step logs={[]} />
-                      )}
-                    </div>
-                  )}
-                  {activeTab === "scope" && (
-                    <div>
-                      {step ? (
-                        <div className="InfoPanel">
-                          {step.scopes &&
-                            step.scopes
-                              .slice()
-                              .reduce((childrenScopes, scope, j) => {
-                                const bindings = Object.entries(scope);
-                                return (
-                                  <div
-                                    className={`scope-container ${
-                                      j === 0 ? "top-scope" : ""
-                                    }`}
-                                    style={{
-                                      display: "inline-block",
-                                      marginTop: "10px",
-                                      border: `2px solid ${
-                                        j === 0 ? "black" : "#ccc"
-                                      }`,
-                                      padding: "10px",
-                                      borderRadius: "4px",
-                                      ...(j === 0 && {
-                                        boxShadow:
-                                          "0 2px 6px rgba(0, 0, 0, .2)",
-                                      }),
-                                    }}
-                                  >
-                                    {bindings.length === 0 && (
-                                      <p className="no-variables">
-                                        <em>(no variables in this scope)</em>
-                                      </p>
-                                    )}
-                                    {bindings.map(([variable, value], i) => {
-                                      return (
-                                        <div
-                                          key={i}
-                                          className="binding-item"
-                                          style={{
-                                            display: "flex",
-                                            flexWrap: "wrap",
-                                            paddingBottom:
-                                              i === bindings.length - 1
-                                                ? 0
-                                                : 10,
-                                          }}
-                                        >
-                                          <div
-                                            style={{
-                                              fontFamily: "monospace",
-                                              fontSize: "14px",
-                                            }}
-                                          >
-                                            <strong>{variable}:</strong>{" "}
-                                            {typeof value === "object"
-                                              ? JSON.stringify(value)
-                                              : String(value)}
-                                          </div>
-                                        </div>
-                                      );
-                                    })}
-                                    {childrenScopes}
-                                  </div>
-                                );
-                              }, <div />)}
-                        </div>
-                      ) : (
-                        <div className="InfoPanel">No scope data available</div>
-                      )}
-                    </div>
-                  )}
-                  {activeTab === "console" && (
-                    <div>
-                      {step && steps ? (
-                        <div className="InfoPanel">
-                          {steps
-                            .slice(0, step.num + 1)
-                            .map((s) => s.logs || [])
-                            .flat()
-                            .map((items, i) => {
-                              return (
-                                <div
-                                  key={i}
-                                  style={{
-                                    display: "flex",
-                                    flexWrap: "wrap",
-                                    paddingBottom: 10,
-                                    ...(i !== 0 && {
-                                      borderTop: "2px solid #ccc",
-                                      paddingTop: 10,
-                                    }),
-                                  }}
-                                >
-                                  {items.map((item, j) => {
-                                    return (
-                                      <div
-                                        key={j}
-                                        className="console-item"
-                                        style={{
-                                          fontFamily: "monospace",
-                                          fontSize: "14px",
-                                        }}
-                                      >
-                                        {typeof item === "object"
-                                          ? JSON.stringify(item)
-                                          : String(item)}{" "}
-                                      </div>
-                                    );
-                                  })}
-                                </div>
-                              );
-                            })}
-                        </div>
-                      ) : (
-                        <div className="InfoPanel">
-                          No console output available
-                        </div>
-                      )}
-                    </div>
+            <div className="all-in-one-view">
+              <div style={{ display: "flex", gap: "20px" }}>
+                <div style={{ flex: 1 }}>
+                  {step && steps ? (
+                    <Step
+                      step={step}
+                      logs={steps
+                        .slice(0, step.num + 1)
+                        .map((s) => s.logs || [])
+                        .flat()}
+                    />
+                  ) : (
+                    <Step />
                   )}
                 </div>
               </div>
-            ) : (
-              // All-in-one view
-              <div className="all-in-one-view">
-                <div style={{ display: "flex", gap: "20px" }}>
-                  <div style={{ flex: 1 }}>
-                    <h3>Steps</h3>
-                    {step && steps ? (
-                      <Step
-                        step={step}
-                        logs={steps
-                          .slice(0, step.num + 1)
-                          .map((s) => s.logs || [])
-                          .flat()}
-                      />
-                    ) : (
-                      <Step />
-                    )}
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <h3>Scope & Console</h3>
-                    <div style={{ maxHeight: "300px", overflowY: "auto" }}>
-                      <div className="InfoPanel">
-                        <h2>Scope</h2>
-                        {step && step.scopes ? (
-                          step.scopes
-                            .slice()
-                            .reduce((childrenScopes, scope, j) => {
-                              const bindings = Object.entries(scope);
-                              return (
-                                <div
-                                  className={`scope-container ${
-                                    j === 0 ? "top-scope" : ""
-                                  }`}
-                                  style={{
-                                    display: "inline-block",
-                                    marginTop: "10px",
-                                    border: `2px solid ${
-                                      j === 0 ? "black" : "#ccc"
-                                    }`,
-                                    padding: "10px",
-                                    borderRadius: "4px",
-                                    ...(j === 0 && {
-                                      boxShadow: "0 2px 6px rgba(0, 0, 0, .2)",
-                                    }),
-                                  }}
-                                >
-                                  {bindings.length === 0 && (
-                                    <p className="no-variables">
-                                      <em>(no variables in this scope)</em>
-                                    </p>
-                                  )}
-                                  {bindings.map(([variable, value], i) => {
-                                    return (
-                                      <div
-                                        key={i}
-                                        className="binding-item"
-                                        style={{
-                                          display: "flex",
-                                          flexWrap: "wrap",
-                                          paddingBottom:
-                                            i === bindings.length - 1 ? 0 : 10,
-                                        }}
-                                      >
-                                        <div
-                                          style={{
-                                            fontFamily: "monospace",
-                                            fontSize: "14px",
-                                          }}
-                                        >
-                                          <strong>{variable}:</strong>{" "}
-                                          {typeof value === "object"
-                                            ? JSON.stringify(value)
-                                            : String(value)}
-                                        </div>
-                                      </div>
-                                    );
-                                  })}
-                                  {childrenScopes}
-                                </div>
-                              );
-                            }, <div />)
-                        ) : (
-                          <p>No scope data available</p>
-                        )}
-                      </div>
-                      <div className="InfoPanel">
-                        <h2>Console</h2>
-                        {steps && step ? (
-                          steps
-                            .slice(0, step.num + 1)
-                            .map((s) => s.logs || [])
-                            .flat()
-                            .map((items, i) => {
-                              return (
-                                <div
-                                  key={i}
-                                  style={{
-                                    display: "flex",
-                                    flexWrap: "wrap",
-                                    paddingBottom: 10,
-                                    ...(i !== 0 && {
-                                      borderTop: "2px solid #ccc",
-                                      paddingTop: 10,
-                                    }),
-                                  }}
-                                >
-                                  {items.map((item, j) => {
-                                    return (
-                                      <div
-                                        key={j}
-                                        className="console-item"
-                                        style={{
-                                          fontFamily: "monospace",
-                                          fontSize: "14px",
-                                        }}
-                                      >
-                                        {typeof item === "object"
-                                          ? JSON.stringify(item)
-                                          : String(item)}{" "}
-                                      </div>
-                                    );
-                                  })}
-                                </div>
-                              );
-                            })
-                        ) : (
-                          <p>No console output available</p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+            </div>
           </div>
         )}
       </div>
       <p style={{ opacity: "0" }}>{scalePercentage}</p>
-      <p>todo: add web api somehow with iframe </p>
     </div>
   );
 }

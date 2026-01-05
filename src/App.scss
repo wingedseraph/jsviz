@@ -208,16 +208,20 @@ pre[class*="language-"] {
   // min-width: clamp(280px, 30vw, 400px);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
   .rewrite-editor {
     flex-direction: column;
   }
-
   .rewrite-editor > div {
     min-width: auto;
-    width: 100%;
+    width: clamp(280px, 90vw, 100%);
+    margin: 0 auto;
   }
 }
+#app > div > div.rewrite-editor > div.Editor > section > div {
+  width: clamp(300px, 50vw, 600px);
+}
+
 #app > div > div.rewrite-editor > div.Editor > div > pre > div {
   overflow: hidden !important;
   // white-space: pre-wrap !important;

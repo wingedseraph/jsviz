@@ -562,7 +562,6 @@ g                           const newObj = {};
           /> */}
           <Editor
             height="500px"
-            width="50vw"
             language="javascript"
             theme="light"
             value={code}
@@ -580,6 +579,7 @@ g                           const newObj = {};
               overviewRulerBorder: true,
               overviewRulerLanes: 0,
               renderLineHighlight: "none",
+              fontFamily: "JuliaMono Nerd Font Mono",
             }}
           />
         </div>

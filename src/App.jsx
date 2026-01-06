@@ -568,6 +568,12 @@ g                           const newObj = {};
             onChange={set_code}
             onMount={handleEditorDidMount}
             options={{
+              lineNumbers: "off",
+              glyphMargin: false, // Disables the margin for glyphs (breakpoints, etc)
+              folding: true, // Disables code folding icons
+              lineDecorationsWidth: 0, // Removes the space reserved for line decorations
+              lineNumbersMinChars: 0,
+              renderIndentGuides: false,
               inlineSuggest: true,
               fontSize: "16px",
               formatOnType: true,
